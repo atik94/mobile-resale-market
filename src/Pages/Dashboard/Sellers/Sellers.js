@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import ConfirmationModal from "../../Shared/ConfirmationModal/ConfirmationModal";
 
 const Sellers = () => {
   const [sellers, setSellers] = useState([]);
+  const [deleteSellers, setDeleteSellers] = useState(null);
+  const [deleteSellerLoading, setDeleteSellerLoading] = useState(true);
+  const closeModal = () => {
+    setDeleteSellers(null);
+  };
   useEffect(() => {
     fetch("http://localhost:5000/sellers")
       .then((res) => res.json())
       .then((data) => setSellers(data));
-  }, []);
+    setDeleteSellerLoading(false);
+  }, [deleteSellerLoading]);
 
   const handleStatusUpdate = (id) => {
     fetch(`http://localhost:5000/sellers/${id}`, {
@@ -29,6 +37,18 @@ const Sellers = () => {
         }
       });
   };
+
+  const handleDeleteSellers = (seller) => {
+    fetch(`http://localhost:5000/users/${seller._id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.deletedCount > 0) {
+          toast.success(`Buyer ${seller.name} deleted successfully`);
+        }
+      });
+  };
   return (
     <div>
       <h2 className="text-5xl">All Sellers</h2>
@@ -40,7 +60,7 @@ const Sellers = () => {
               <th>Name</th>
               <th>Email</th>
               <th>Verify</th>
-              <th>Delete</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -55,13 +75,29 @@ const Sellers = () => {
                   </button>
                 </td>
                 <td>
-                  <button className="btn btn-xs btn-danger">Delete</button>
+                  <label
+                    onClick={() => setDeleteSellers(seller)}
+                    htmlFor="confirmation-modal"
+                    className="btn btn-error"
+                  >
+                    Delete
+                  </label>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {deleteSellers && (
+        <ConfirmationModal
+          title={`Are you sure want to delete ?`}
+          message={`If you delete ${deleteSellers.name}. It can not be undone.`}
+          closeModal={closeModal}
+          successAction={handleDeleteSellers}
+          modalData={deleteSellers}
+          successButtonName="Delete"
+        ></ConfirmationModal>
+      )}
     </div>
   );
 };

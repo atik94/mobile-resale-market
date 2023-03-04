@@ -1,8 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
+import { toast } from "react-hot-toast";
+import ConfirmationModal from "../../Shared/ConfirmationModal/ConfirmationModal";
 import Loading from "../../Shared/Loading/Loading";
 const MyProducts = () => {
-  const { data: products, isLoading } = useQuery({
+  const [deleteProducts, setDeleteProducts] = useState(null);
+  const closeModal = () => {
+    setDeleteProducts(null);
+  };
+  const {
+    data: products,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
       try {
@@ -17,6 +27,18 @@ const MyProducts = () => {
     return <Loading></Loading>;
   }
 
+  const handleDeleteProducts = (product) => {
+    fetch(`http://localhost:5000/products/${product._id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.deletedCount > 0) {
+          refetch();
+          toast.success(`Product ${product.name} deleted successfully`);
+        }
+      });
+  };
   return (
     <div>
       <h2 className="text-3xl">Manage Products</h2>
@@ -51,13 +73,29 @@ const MyProducts = () => {
                 <td>{product.conditionType}</td>
                 <td>{product.sellersName}</td>
                 <td>
-                  <button className="btn btn-error">Delete</button>
+                  <label
+                    onClick={() => setDeleteProducts(product)}
+                    htmlFor="confirmation-modal"
+                    className="btn btn-error"
+                  >
+                    Delete
+                  </label>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      {deleteProducts && (
+        <ConfirmationModal
+          title={`Are you sure want to delete ?`}
+          message={`If you delete ${deleteProducts.name}. It can not be undone.`}
+          closeModal={closeModal}
+          successAction={handleDeleteProducts}
+          modalData={deleteProducts}
+          successButtonName="Delete"
+        ></ConfirmationModal>
+      )}
     </div>
   );
 };
