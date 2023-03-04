@@ -24,10 +24,13 @@ const MyProducts = () => {
         <table className="table w-full">
           <thead>
             <tr>
-              <th></th>
+              <th>SL</th>
               <th>Avatar</th>
               <th>Name</th>
-              <th>Email</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Condition</th>
+              <th>SellersName</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -43,9 +46,12 @@ const MyProducts = () => {
                   </div>
                 </td>
                 <td>{product.name}</td>
-                <td>{product.email}</td>
+                <td>{product.category_name}</td>
+                <td>{product.resalePrice}</td>
+                <td>{product.conditionType}</td>
+                <td>{product.sellersName}</td>
                 <td>
-                  <button className="btn btn-error">Error</button>
+                  <button className="btn btn-error">Delete</button>
                 </td>
               </tr>
             ))}

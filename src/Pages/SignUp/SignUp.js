@@ -21,7 +21,7 @@ const SignUp = () => {
   }
   const handleSignup = (data) => {
     setSignUpError("");
-    createUser(data.email, data.password)
+    createUser(data.email, data.password, data.role)
       .then((result) => {
         const user = result.user;
         console.log(user);
@@ -31,7 +31,7 @@ const SignUp = () => {
         };
         updateUser(userInfo)
           .then(() => {
-            saveUser(data.name, data.email);
+            saveUser(data.name, data.email, data.role);
           })
           .catch((err) => console.log(err));
       })
@@ -41,8 +41,8 @@ const SignUp = () => {
       });
   };
 
-  const saveUser = (name, email) => {
-    const user = { name, email };
+  const saveUser = (name, email, role) => {
+    const user = { name, email, role };
     fetch("http://localhost:5000/users", {
       method: "POST",
       headers: {
@@ -108,6 +108,11 @@ const SignUp = () => {
             />
             {errors.password && <p className="text-red-600">{errors.password?.message}</p>}
           </div>
+          <select className="input input-bordered w-full max-w-xs" {...register("role", { required: true })}>
+            <option value="">Select...</option>
+            <option value="sellers">sellers</option>
+            <option value="buyers">buyers</option>
+          </select>
           <input className="btn btn-accent w-full mt-4" value="Sign Up" type="submit" />
           {signUpError && <p className="text-red-600">{signUpError}</p>}
         </form>

@@ -41,7 +41,7 @@ const AddProducts = () => {
             location: data.location,
             originalPrice: data.originalPrice,
             resalePrice: data.resalePrice,
-            yearOfUser: data.yearOfUser,
+            yearOfUse: data.yearOfUse,
             sellersName: data.sellersName,
             conditionType: data.conditionType,
             mobileNumber: data.mobileNumber,
@@ -76,6 +76,7 @@ const AddProducts = () => {
               </option>
             ))}
           </select>
+
           {/* {errors.category_name && <p className="text-red-700">{errors.category_name?.message}</p>} */}
         </div>
         <div className="form-control w-full max-w-xs">
