@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import useTitle from "../../../hooks/useTitle";
 import ConfirmationModal from "../../Shared/ConfirmationModal/ConfirmationModal";
 
 const Sellers = () => {
+  useTitle("AllSeller");
   const [sellers, setSellers] = useState([]);
   const [deleteSellers, setDeleteSellers] = useState(null);
-  const [deleteSellerLoading, setDeleteSellerLoading] = useState(true);
+  const [deleteSellerLoading, setDeleteSellerLoading] = useState(false);
   const closeModal = () => {
     setDeleteSellers(null);
   };
   useEffect(() => {
-    fetch("http://localhost:5000/sellers")
+    fetch("http://localhost:5000/sellers", {
+      headers: {
+        authorization: `bearer ${localStorage.getItem("accessToken")}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => setSellers(data));
-    setDeleteSellerLoading(false);
   }, [deleteSellerLoading]);
 
   const handleStatusUpdate = (id) => {
@@ -46,6 +51,7 @@ const Sellers = () => {
       .then((data) => {
         if (data.deletedCount > 0) {
           toast.success(`Buyer ${seller.name} deleted successfully`);
+          setDeleteSellerLoading(!deleteSellerLoading);
         }
       });
   };

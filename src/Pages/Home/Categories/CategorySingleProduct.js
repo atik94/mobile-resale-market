@@ -1,7 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 const CategorySingleProduct = ({ singleProduct, setOrders }) => {
   //console.log(singleProduct);
   const {
+    _id,
     name,
     image,
     conditionType,
@@ -33,6 +35,11 @@ const CategorySingleProduct = ({ singleProduct, setOrders }) => {
           <label htmlFor="booking-modal" className="btn btn-primary" onClick={() => setOrders(singleProduct)}>
             Book Now
           </label>
+        </div>
+        <div>
+          <Link to={`/dashboard/wishlish/${_id}`}>
+            <button className="btn btn-primary">Wish List</button>
+          </Link>
         </div>
       </div>
     </div>

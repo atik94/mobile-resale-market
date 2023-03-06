@@ -2,9 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthProvider";
+import useTitle from "../../../hooks/useTitle";
 import Loading from "../../Shared/Loading/Loading";
 
 const MyOrders = () => {
+  useTitle("My-Ordes");
   const { user } = useContext(AuthContext);
   const url = `http://localhost:5000/bookings?email=${user?.email}`;
   const { data: bookings = [], isLoading } = useQuery({

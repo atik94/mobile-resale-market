@@ -3,8 +3,10 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthProvider";
+import useTitle from "../../../hooks/useTitle";
 
 const AddProducts = () => {
+  useTitle("Add-product");
   const {
     register,
     formState: { errors },
@@ -39,8 +41,8 @@ const AddProducts = () => {
             name: data.name,
             image: imgData.data.url,
             location: data.location,
-            originalPrice: data.originalPrice,
-            resalePrice: data.resalePrice,
+            originalPrice: parseFloat(data.originalPrice),
+            resalePrice: parseFloat(data.resalePrice),
             yearOfUse: data.yearOfUse,
             sellersName: data.sellersName,
             conditionType: data.conditionType,
@@ -51,6 +53,7 @@ const AddProducts = () => {
             method: "POST",
             headers: {
               "content-type": "application/json",
+              authorization: `bearer ${localStorage.getItem("accessToken")}`,
             },
             body: JSON.stringify(addProducts),
           })

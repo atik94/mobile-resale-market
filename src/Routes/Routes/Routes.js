@@ -9,8 +9,11 @@ import MyOrders from "../../Pages/Dashboard/MyOrders/MyOrders";
 import MyProducts from "../../Pages/Dashboard/MyProducts/MyProducts";
 import Payment from "../../Pages/Dashboard/Payment/Payment";
 import Sellers from "../../Pages/Dashboard/Sellers/Sellers";
+import AboutUs from "../../Pages/Home/AboutUs/AboutUs";
+import Blog from "../../Pages/Home/Blog/Blog";
 import CategoryProducts from "../../Pages/Home/Categories/CategoryProducts";
 import Home from "../../Pages/Home/Home/Home";
+import NotFound from "../../Pages/Home/NotFound/NotFound";
 import Login from "../../Pages/Login/Login";
 import DisplayError from "../../Pages/Shared/DisplayError/DisplayError";
 import SignUp from "../../Pages/SignUp/SignUp";
@@ -29,6 +32,14 @@ const router = createBrowserRouter([
         element: <Home></Home>,
       },
       {
+        path: "/blog",
+        element: <Blog></Blog>,
+      },
+      {
+        path: "/aboutus",
+        element: <AboutUs></AboutUs>,
+      },
+      {
         path: "/login",
         element: <Login></Login>,
       },
@@ -38,7 +49,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/category/:_id",
-        element: <CategoryProducts></CategoryProducts>,
+        element: (
+          <PrivateRoute>
+            <CategoryProducts></CategoryProducts>
+          </PrivateRoute>
+        ),
         loader: ({ params }) => fetch(`http://localhost:5000/categories/${params._id}`),
       },
     ],
@@ -114,6 +129,10 @@ const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound></NotFound>,
   },
 ]);
 export default router;

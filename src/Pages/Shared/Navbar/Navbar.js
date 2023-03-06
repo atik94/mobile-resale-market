@@ -17,10 +17,10 @@ const Navbar = () => {
         <Link to="/">Home</Link>
       </li>
       <li>
-        <Link to="/appointment">Appointment</Link>
+        <Link to="/blog">Blog</Link>
       </li>
       <li>
-        <Link to="/about">About</Link>
+        <Link to="/aboutus">About</Link>
       </li>
       {user?.uid ? (
         <>
@@ -40,7 +40,10 @@ const Navbar = () => {
   );
 
   return (
-    <div className="navbar bg-base-100 flex justify-between">
+    <div
+      className="navbar flex justify-between text-neutral-content text-2xl font-bold bg-indigo-500 hover:bg-indigo-900 ..."
+      // style={{ backgroundColor: "#312e81" }}
+    >
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -59,7 +62,9 @@ const Navbar = () => {
           </ul>
         </div>
         <Link to="/" className="btn btn-ghost normal-case text-xl">
-          Doctors Portal
+          <span className="text-3xl font-bold text-orange-700">M</span>obile
+          <span className="text-3xl font-bold text-lime-500">R</span>
+          esale <span className="text-3xl font-bold text-fuchsia-700">M</span>arket
         </Link>
       </div>
       <div className="navbar-center hidden lg:flex">

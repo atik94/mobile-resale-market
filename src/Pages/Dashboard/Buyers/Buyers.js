@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
+import useTitle from "../../../hooks/useTitle";
 import ConfirmationModal from "../../Shared/ConfirmationModal/ConfirmationModal";
 
 const Buyers = () => {
+  useTitle("AllBuyer");
   const [deleteBuyers, setDeleteBuyers] = useState(null);
   const closeModal = () => {
     setDeleteBuyers(null);
@@ -12,7 +14,11 @@ const Buyers = () => {
   const { data: buyers = [], refetch } = useQuery({
     queryKey: ["buyers"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/buyers");
+      const res = await fetch("http://localhost:5000/buyers", {
+        headers: {
+          authorization: `bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
       const data = await res.json();
       return data;
     },

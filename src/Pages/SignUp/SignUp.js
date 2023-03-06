@@ -2,16 +2,19 @@ import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import SmallSpinner from "../../components/Spinner/SmallSpinner";
 import { AuthContext } from "../../contexts/AuthProvider";
+import useTitle from "../../hooks/useTitle";
 import useToken from "../../hooks/useToken";
 
 const SignUp = () => {
+  useTitle("SignUp");
   const {
     register,
     formState: { errors },
     handleSubmit,
   } = useForm();
-  const { createUser, updateUser } = useContext(AuthContext);
+  const { createUser, updateUser, loading, setLoading } = useContext(AuthContext);
   const [signUpError, setSignUpError] = useState("");
   const [createdUserEamil, setCreatedUserEmail] = useState("");
   const [token] = useToken(createdUserEamil);
@@ -38,6 +41,7 @@ const SignUp = () => {
       .catch((error) => {
         console.log(error.message);
         setSignUpError(error.message);
+        setLoading(false);
       });
   };
 
@@ -113,7 +117,8 @@ const SignUp = () => {
             <option value="sellers">sellers</option>
             <option value="buyers">buyers</option>
           </select>
-          <input className="btn btn-accent w-full mt-4" value="Sign Up" type="submit" />
+          {/* <input className="btn btn-accent w-full mt-4" value="Sign Up" type="submit" /> */}
+          <button className="btn btn-primary w-full">{loading ? <SmallSpinner /> : "Sign Up"}</button>
           {signUpError && <p className="text-red-600">{signUpError}</p>}
         </form>
         <p>
