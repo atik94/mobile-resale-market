@@ -14,7 +14,7 @@ const SignUp = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
-  const { createUser, updateUser, loading, setLoading } = useContext(AuthContext);
+  const { createUser, updateUser, signInWithGoogle, verifyEmail, loading, setLoading } = useContext(AuthContext);
   const [signUpError, setSignUpError] = useState("");
   const [createdUserEamil, setCreatedUserEmail] = useState("");
   const [token] = useToken(createdUserEamil);
@@ -35,6 +35,9 @@ const SignUp = () => {
         updateUser(userInfo)
           .then(() => {
             saveUser(data.name, data.email, data.role);
+            verifyEmail().then(() => {
+              toast.success("Please check your email for verification link");
+            });
           })
           .catch((err) => console.log(err));
       })
@@ -58,6 +61,13 @@ const SignUp = () => {
       .then((data) => {
         setCreatedUserEmail(email);
       });
+  };
+
+  const handleGoogleSignin = () => {
+    signInWithGoogle().then((result) => {
+      console.log(result);
+      saveUser(result.user.displayName, result.user.email);
+    });
   };
 
   return (
@@ -128,7 +138,9 @@ const SignUp = () => {
           </Link>
         </p>
         <div className="divider">OR</div>
-        <button className="btn btn-outline w-full">CONTINUE WITH GOOGLE</button>
+        <button onClick={handleGoogleSignin} className="btn btn-outline w-full">
+          CONTINUE WITH GOOGLE
+        </button>
       </div>
     </div>
   );
